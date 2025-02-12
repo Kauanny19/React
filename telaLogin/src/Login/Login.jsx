@@ -7,6 +7,7 @@ import LockOutLinedIcon from "@mui/icons-material/LockOutLined";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
+import api from "../axios/axios";
 
 function Login() {
   const [user, setUser] = useState({
@@ -16,12 +17,24 @@ function Login() {
 
   const onChange = (event) => {
     const { name, value } = event.target;
-    setUser({ ...user, [name]:value});
+    setUser({ ...user, [name]: value });
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert("Email:"+user.email+" "+"Senha:"+user.password)
+    login();
+  };
+
+  async function login() {
+    await api.postLogin(user).then(
+      (response) => {
+        alert(response.data.message);
+      },
+      (error) => {
+        console.log(error);
+        alert(error.response.data.error);
+      }
+    );
   }
 
   return (
